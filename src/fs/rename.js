@@ -1,4 +1,4 @@
-import { access, F_OK, rename } from "fs";
+import { access, F_OK, rename as renameMethod } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -8,14 +8,14 @@ const folder = join(dirname(path), "files");
 const file = join(folder, "wrongFilename.txt");
 const newFile = join(folder, "properFilename.txt");
 
-const renameFunc = async () => {
+const rename = async () => {
   access(newFile, F_OK, (e) => {
     if (e) {
       access(file, F_OK, (err) => {
         if (err) {
           throw Error("FS operation failed");
         } else {
-          rename(file, newFile, (error) => error && console.error(error));
+          renameMethod(file, newFile, (error) => error && console.error(error));
         }
       });
     } else {
@@ -24,4 +24,4 @@ const renameFunc = async () => {
   });
 };
 
-await renameFunc();
+await rename();
