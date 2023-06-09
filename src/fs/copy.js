@@ -12,14 +12,11 @@ const copy = async () => {
     if (e) {
       throw Error("FS operation failed");
     } else {
-      access(newFolder, F_OK, (err) => {
-        if (err) {
-          mkdir(newFolder, (error) => {
-            if (error) throw error;
-            copyFolder();
-          });
-        } else {
+      mkdir(newFolder, (error) => {
+        if (error) {
           throw Error("FS operation failed");
+        } else {
+          copyFolder();
         }
       });
     }

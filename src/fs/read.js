@@ -1,4 +1,4 @@
-import { access, F_OK, readFile } from "fs";
+import { readFile } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -8,15 +8,11 @@ const folder = join(dirname(path), "files");
 const file = join(folder, "fileToRead.txt");
 
 const read = async () => {
-  access(file, F_OK, (e) => {
-    if (e) {
+  readFile(file, "utf8", (error, content) => {
+    if (error) {
       throw Error("FS operation failed");
-    } else {
-      readFile(file, "utf8", (error, content) => {
-        error && console.error(error);
-        console.log(content);
-      });
     }
+    console.log(content);
   });
 };
 

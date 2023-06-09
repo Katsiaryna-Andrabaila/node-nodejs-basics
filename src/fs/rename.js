@@ -11,11 +11,9 @@ const newFile = join(folder, "properFilename.md");
 const rename = async () => {
   access(newFile, F_OK, (e) => {
     if (e) {
-      access(file, F_OK, (err) => {
-        if (err) {
+      renameMethod(file, newFile, (error) => {
+        if (error) {
           throw Error("FS operation failed");
-        } else {
-          renameMethod(file, newFile, (error) => error && console.error(error));
         }
       });
     } else {
