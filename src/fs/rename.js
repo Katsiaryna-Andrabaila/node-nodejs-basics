@@ -6,7 +6,7 @@ import { dirname } from "path";
 const path = fileURLToPath(import.meta.url);
 const folder = join(dirname(path), "files");
 const file = join(folder, "wrongFilename.txt");
-const newFile = join(folder, "properFilename.txt");
+const newFile = join(folder, "properFilename.md");
 
 const rename = async () => {
   access(newFile, F_OK, (e) => {
