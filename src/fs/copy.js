@@ -1,4 +1,4 @@
-import { access, F_OK, readdir, copyFile, mkdir } from "fs";
+import { copyFile, constants, readdir, mkdir, access } from "fs/promises";
 import { join } from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -8,30 +8,20 @@ const folder = join(dirname(path), "files");
 const newFolder = join(dirname(path), "files_copy");
 
 const copy = async () => {
-  access(folder, F_OK, (e) => {
-    if (e) {
-      throw Error("FS operation failed");
-    } else {
-      mkdir(newFolder, (error) => {
-        if (error) {
-          throw Error("FS operation failed");
-        } else {
-          copyFolder();
-        }
-      });
-    }
-  });
-};
-
-function copyFolder() {
-  readdir(folder, (e, files) => {
-    if (e) throw error;
+  try {
+    await access(folder, constants.R_OK | constants.W_OK);
+    await mkdir(newFolder);
+    const files = await readdir(folder);
     for (const file of files) {
-      copyFile(join(folder, file), join(newFolder, file), (error) => {
-        if (error) throw error;
-      });
+      await copyFile(
+        join(folder, file),
+        join(newFolder, file),
+        constants.COPYFILE_EXCL
+      );
     }
-  });
-}
+  } catch {
+    throw Error("FS operation failed");
+  }
+};
 
 await copy();
