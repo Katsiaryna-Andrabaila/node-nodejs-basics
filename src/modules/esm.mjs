@@ -4,6 +4,7 @@ import { createServer as createServerHttp } from "http";
 import "./files/c.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "module";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,10 +13,11 @@ const random = Math.random();
 
 let unknownObject;
 
+const esmRequire = createRequire(import.meta.url);
 if (random > 0.5) {
-  unknownObject = "./files/a.json";
+  unknownObject = esmRequire("./files/a.json");
 } else {
-  unknownObject = "./files/b.json";
+  unknownObject = esmRequire("./files/b.json");
 }
 
 console.log(`Release ${release()}`);
