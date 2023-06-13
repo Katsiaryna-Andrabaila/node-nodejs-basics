@@ -12,19 +12,18 @@ const workersAmount = availableParallelism();
 const performCalculations = async () => {
   const workerThreads = [];
 
+  const work = (workerData) => {
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(workerThread, { workerData });
+      worker.on("message", (res) =>
+        resolve({ status: "resolved", value: res })
+      );
+      worker.on("error", () => resolve({ status: "error", value: null }));
+    });
+  };
+
   for (let i = 10; i < workersAmount + 10; i++) {
-    const work = (workerData) => {
-      return new Promise((resolve, reject) => {
-        const worker = new Worker(workerThread, { workerData });
-        worker.on("message", resolve);
-        worker.on("error", reject);
-      });
-    };
-    await work(i).then((res) =>
-      res
-        ? workerThreads.push({ status: "resolved", value: res })
-        : workerThreads.push({ status: "error", value: null })
-    );
+    await work(i).then((res) => workerThreads.push(res));
   }
 
   console.log(await Promise.all(workerThreads));
