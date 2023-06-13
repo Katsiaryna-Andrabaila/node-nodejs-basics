@@ -10,7 +10,7 @@ const folder = join(dirname(path), "files");
 const file = join(folder, "fileToWrite.txt");
 
 const write = async () => {
-  const myStream = createWriteStream(file, "utf-8");
+  const myStream = createWriteStream(file, { flags: "a", encoding: "utf-8" });
   stdin.on("data", (data) => myStream.write(data));
 };
 
