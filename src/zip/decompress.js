@@ -1,4 +1,4 @@
-import { createUnzip } from "zlib";
+import { createGunzip } from "zlib";
 import { createReadStream, createWriteStream } from "fs";
 import { join } from "path";
 import { fileURLToPath } from "url";
@@ -10,7 +10,7 @@ const file = join(folder, "fileToCompress.txt");
 const archive = join(folder, "archive.gz");
 
 const decompress = async () => {
-  const gzip = createUnzip();
+  const gzip = createGunzip();
   const input = createReadStream(archive);
   const output = createWriteStream(file, "utf-8");
 
